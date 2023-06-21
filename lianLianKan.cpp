@@ -96,6 +96,8 @@ public:
                     return false;
             }
         }
+        else
+            return false;
         return true;
     }
 
@@ -105,16 +107,18 @@ public:
         int upCrossPointY = y2;
         int downCrossPointX = x2;
         int downCrossPointY = y1;
-        if(this->map[upCrossPointX][upCrossPointY] != 0 ||
-        this->map[downCrossPointX][downCrossPointY] != 0)
-            return false;
+//        if(this->map[upCrossPointX][upCrossPointY] != 0 ||
+//        this->map[downCrossPointX][downCrossPointY] != 0)
+//            return false;
         if(straightLineEliminate(x1, y1, upCrossPointX, upCrossPointY) &&
-                straightLineEliminate(x2, y2, upCrossPointX, upCrossPointY))
+                straightLineEliminate(x2, y2, upCrossPointX, upCrossPointY)
+                && this->map[upCrossPointX][upCrossPointY] == 0)
         {
             return true;
         }
         if(straightLineEliminate(x1, y1, downCrossPointX, downCrossPointY) &&
-                straightLineEliminate(x2, y2, downCrossPointX, downCrossPointY))
+                straightLineEliminate(x2, y2, downCrossPointX, downCrossPointY)
+                && this->map[downCrossPointX][downCrossPointY] == 0)
         {
             return true;
         }
@@ -235,10 +239,12 @@ public:
                 else
                 {
                     int key = this->map[i][j];
-                    for(int m = 1; m <= this->width && m != i; ++m)
+                    for(int m = 1; m <= this->width; ++m)
                     {
-                        for(int n = 1; n <= this->length && n != j; ++n)
+                        for(int n = 1; n <= this->length; ++n)
                         {
+                            if(m == i && n == j)
+                                continue;
                             if(this->map[m][n] != key)
                                 continue;
                             if(straightLineEliminate(i, j, m, n)
